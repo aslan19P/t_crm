@@ -327,7 +327,7 @@ export default function Home() {
       <div className={styles.blockforScanner} >
         <button onClick={() => setIsEnabled(!isEnabled)}>
         </button>
-        <div id="qrCodeContainer" style={{ width: "100%", height: "300px" }}></div>
+        <div id="qrCodeContainer" style={{ width: "100%", height: "300px", filter: "invert(1)" }}></div>
         {qrMessage ? <p>Считанный QR-код: {qrMessage}</p> : <p>QR-код ещё не считан</p>}
       </div>
 
