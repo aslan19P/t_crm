@@ -285,42 +285,75 @@ export default function Home() {
 
   // -------------------------------------------------------------------------
 
-  const [isEnabled, setIsEnabled] = useState(false);
   const [qrMessage, setQrMessage] = useState("");
+  const [isEnabled, setIsEnabled] = useState(false);
 
-  useEffect(() => {
-    let html5QrCode;
+  const initializeScanner = () => {
+    const scanner = new Html5QrcodeScanner(
+      "qrCodeContainer",
+      {
+        fps: 10,
+        qrbox: { width: 250, height: 250 },
+        disableFlip: true, // Важно, чтобы инвертированное изображение правильно обрабатывалось
+      },
+      false
+    );
 
-    const qrCodeSuccess = (decodedText) => {
-      console.log("QR-код успешно считан:", decodedText);
-      setQrMessage(decodedText);
-      setIsEnabled(false);
-    };
+    scanner.render(
+      (decodedText) => {
+        setQrMessage(decodedText);
+        scanner.clear(); // Остановить сканер после успешного сканирования
+      },
+      (error) => {
+        console.error(error);
+      }
+    );
+  };
 
-    const qrCodeError = (error) => {
-      console.warn("Ошибка считывания QR-кода:", error);
-    };
+  const handleScanImage = (videoElement) => {
+    // Создание Canvas для обработки изображения
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
 
-    if (isEnabled) {
-      html5QrCode = new Html5Qrcode("qrCodeContainer");
-      html5QrCode
-        .start(
-          { facingMode: "environment" },
-          { fps: 15, qrbox: { width: 400, height: 400 } },
-          qrCodeSuccess,
-          qrCodeError
-        )
-        .catch((err) => {
-          console.error("Ошибка запуска сканера:", err);
-        });
+    // Рисуем кадр с видео на Canvas
+    ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+
+    // Получаем данные изображения
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const data = imageData.data;
+
+    // Инвертируем цвета
+    for (let i = 0; i < data.length; i += 4) {
+      data[i] = 255 - data[i];     // Инвертируем Red
+      data[i + 1] = 255 - data[i + 1]; // Инвертируем Green
+      data[i + 2] = 255 - data[i + 2]; // Инвертируем Blue
     }
 
-    return () => {
-      if (html5QrCode) {
-        html5QrCode.stop().then(() => html5QrCode.clear());
-      }
-    };
-  }, [isEnabled]);
+    // Обновляем Canvas с инвертированными данными
+    ctx.putImageData(imageData, 0, 0);
+
+    // Используем инвертированное изображение для дальнейшей обработки
+    const invertedImageDataUrl = canvas.toDataURL();
+
+    // Вставьте свой код для обработки QR-кода на инвертированном изображении
+    // Например, используйте стороннюю библиотеку для обработки изображения
+  };
+
+  const startScanner = () => {
+    // Подключаем камеру и начинаем сканирование
+    const videoElement = document.createElement("video");
+
+    navigator.mediaDevices
+      .getUserMedia({ video: true })
+      .then((stream) => {
+        videoElement.srcObject = stream;
+        videoElement.play();
+        handleScanImage(videoElement); // Применяем инверсию
+      })
+      .catch((error) => {
+        console.error("Error accessing camera:", error);
+      });
+  };
 
   return (
     <ClientWrapper>
