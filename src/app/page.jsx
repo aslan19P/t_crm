@@ -819,120 +819,115 @@ export default function Home() {
                       </h1>
                       <div className={styles.boxfixedblock}>
                         <div className={styles.boxonestat}>
-                          <p>User ID</p>
-                          <p>№ билета</p>
-                          <p>Просканировано</p>
-                          <p>Кассир</p>
+                          <p>ID</p>
+                          <p>№</p>
+                          <p>Дата</p>
                           <p>Статус</p>
                         </div>
                         <div className={styles.boxscrollstat}>
                           <div className={styles.boxtwostat}>
                             <p>12345</p>
                             <p>12345</p>
-                            <p>21.12.2024 20:31</p>
-                            <p>Антон</p>
+                            <p>21.12.2024</p>
+                            <p>
                             <Image
                               src="/scansucsessone.svg"
                               alt="sucsess"
                               width={24}
                               height={24}
                             />
+                            </p>
                           </div>
                           <div className={styles.boxtwostat}>
                             <p>12345</p>
                             <p>12345</p>
-                            <p>21.12.2024 20:31</p>
-                            <p>Антон</p>
+                            <p>21.12.2024</p>
+                            <p>
                             <Image
                               src="/scansucsessone.svg"
                               alt="sucsess"
                               width={24}
                               height={24}
                             />
+                            </p>
                           </div>
                           <div className={styles.boxtwostat}>
                             <p>12345</p>
                             <p>12345</p>
-                            <p>21.12.2024 20:31</p>
-                            <p>Антон</p>
+                            <p>21.12.2024</p>
+                            <p>
                             <Image
                               src="/scansucsessone.svg"
                               alt="sucsess"
                               width={24}
                               height={24}
                             />
+                            </p>
                           </div>
                           <div className={styles.boxtwostat}>
                             <p>12345</p>
                             <p>12345</p>
-                            <p>21.12.2024 20:31</p>
-                            <p>Антон</p>
+                            <p>21.12.2024</p>
+                            <p>
                             <Image
                               src="/scansucsessone.svg"
                               alt="sucsess"
                               width={24}
                               height={24}
                             />
+                            </p>
                           </div>
                           <div className={styles.boxtwostat}>
                             <p>12345</p>
                             <p>12345</p>
-                            <p>21.12.2024 20:31</p>
-                            <p>Антон</p>
+                            <p>21.12.2024</p>
+                            <p>
                             <Image
                               src="/scansucsessone.svg"
                               alt="sucsess"
                               width={24}
                               height={24}
                             />
+                            </p>
                           </div>
                           <div className={styles.boxtwostat}>
                             <p>12345</p>
                             <p>12345</p>
-                            <p>21.12.2024 20:31</p>
-                            <p>Антон</p>
+                            <p>21.12.2024</p>
+                            <p>
                             <Image
                               src="/scansucsessone.svg"
                               alt="sucsess"
                               width={24}
                               height={24}
                             />
+                            </p>
                           </div>
                           <div className={styles.boxtwostat}>
                             <p>12345</p>
                             <p>12345</p>
-                            <p>21.12.2024 20:31</p>
-                            <p>Антон</p>
+                            <p>21.12.2024</p>
+                            <p>
                             <Image
                               src="/scansucsessone.svg"
                               alt="sucsess"
                               width={24}
                               height={24}
                             />
+                            </p>
                           </div>
                           <div className={styles.boxtwostat}>
                             <p>12345</p>
                             <p>12345</p>
-                            <p>21.12.2024 20:31</p>
-                            <p>Антон</p>
+                            <p>21.12.2024</p>
+                            <p>
                             <Image
                               src="/scansucsessone.svg"
                               alt="sucsess"
                               width={24}
                               height={24}
                             />
-                          </div>
-                          <div className={styles.boxtwostat}>
-                            <p>12345</p>
-                            <p>12345</p>
-                            <p>21.12.2024 20:31</p>
-                            <p>Антон</p>
-                            <Image
-                              src="/scansucsessone.svg"
-                              alt="sucsess"
-                              width={24}
-                              height={24}
-                            />
+                            </p>
                           </div>
                         </div>
                       </div>

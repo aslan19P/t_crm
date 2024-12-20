@@ -1,4 +1,4 @@
-.blockforScanner{
+.blockforScanner {
     position: fixed;
     backdrop-filter: blur(4px);
     width: 400px;
@@ -6,7 +6,8 @@
     margin: 0 auto;
     border-radius: 15px;
 }
-.qrCodeContainer video{
+
+.qrCodeContainer video {
     border-radius: 16px;
 }
 
@@ -345,11 +346,12 @@
 .maincashier {
     padding: 20px 0px 0px 0px;
     display: flex;
+    flex-direction: row;
     width: 100%;
     justify-content: center;
     align-items: flex-start;
     gap: 20px;
-    flex-wrap: wrap;
+    /* flex-wrap: wrap; */
 }
 
 .boxfastinstrument {
@@ -613,13 +615,6 @@
     justify-content: space-between;
 }
 
-.boxfixedblock {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    gap: 4px;
-    overflow-y: auto;
-}
 
 .boxscrollstat {
     display: flex;
@@ -637,17 +632,28 @@
 
 .boxscrollstat::-webkit-scrollbar-track {
     background: #656565;
-    border-radius: 10px; 
+    border-radius: 10px;
 }
 
 .boxscrollstat::-webkit-scrollbar-thumb {
     width: 8px;
-    background:  var(--Base-Base-White, #FFF);; 
-    border-radius: 10px; 
+    background: var(--Base-Base-White, #FFF);
+    ;
+    border-radius: 10px;
 }
 
 .boxscrollstat::-webkit-scrollbar-thumb:hover {
-    background: #a0a0a0; 
+    background: #a0a0a0;
+}
+
+
+.boxfixedblock {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    align-self: stretch;
+    overflow-y: auto;
 }
 
 
@@ -658,7 +664,7 @@
     align-items: center;
     border-radius: 24px;
     background: var(--Background-Section, #191919);
-    gap: 124px;
+    justify-content: space-between;
 }
 
 .boxonestat p {
@@ -668,16 +674,23 @@
     font-style: normal;
     font-weight: 400;
     line-height: 100%;
+    width: 80px;
 }
 
 .boxtwostat {
     display: flex;
     padding: 7px 10px;
     align-items: center;
-    gap: 145px;
     align-self: stretch;
+    justify-content: space-between;
     border-radius: 24px;
     background: var(--Background-Section, #191919);
+}
+
+.boxtwostat p:last-child, .boxonestat p:last-child{
+    justify-content: end;
+    display: flex;
+    text-align: end;
 }
 
 .boxtwostat p {
@@ -687,6 +700,7 @@
     font-style: normal;
     font-weight: 400;
     line-height: 90%;
+    width: 80px;
 }
 
 .boxstatusqrcontent {
@@ -884,7 +898,7 @@
     background: var(--COLORS-Neutral-500, #191716);
 }
 
-.qrMessage{
+.qrMessage {
     text-align: center;
 }
 
