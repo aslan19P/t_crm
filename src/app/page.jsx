@@ -22,7 +22,6 @@ import {
   Legend,
   Filler,
 } from "chart.js";
-// import { DecodedTextType } from "html5-qrcode/esm/core";
 
 ChartJS.register(
   CategoryScale,
@@ -284,9 +283,28 @@ export default function Home() {
   };
 
   // -------------------------------------------------------------------------
-
   const [isEnabled, setIsEnabled] = useState(false);
   const [qrMessage, setQrMessage] = useState("");
+  const [cameras, setCameras] = useState([]);
+  const [selectedCamera, setSelectedCamera] = useState("");
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    // Получение списка камер при загрузке компонента
+    Html5Qrcode.getCameras()
+      .then((devices) => {
+        if (devices && devices.length > 0) {
+          setCameras(devices);
+          setSelectedCamera(devices[0].id); // Установить первую камеру по умолчанию
+        } else {
+          setError("Камеры не найдены");
+        }
+      })
+      .catch((err) => {
+        console.error("Ошибка получения списка камер:", err);
+        setError("Не удалось получить доступ к камерам");
+      });
+  }, []);
 
   useEffect(() => {
     let html5QrCode;
@@ -301,11 +319,11 @@ export default function Home() {
       console.warn("Ошибка считывания QR-кода:", error);
     };
 
-    if (isEnabled) {
+    if (isEnabled && selectedCamera) {
       html5QrCode = new Html5Qrcode("qrCodeContainer");
       html5QrCode
         .start(
-          { facingMode: "environment" },
+          selectedCamera,
           { fps: 15, qrbox: { width: 400, height: 400 } },
           qrCodeSuccess,
           qrCodeError
@@ -320,24 +338,98 @@ export default function Home() {
         html5QrCode.stop().then(() => html5QrCode.clear());
       }
     };
-  }, [isEnabled]);
+  }, [isEnabled, selectedCamera]);
+
+  // --------------------------------------------
+  // MUIZ НЕ ТРОГАЙ ЭТОТ КОД !!!
+
+  // const [isEnabled, setIsEnabled] = useState(false);
+  // const [qrMessage, setQrMessage] = useState("");
+  // const [isPosting, setIsPosting] = useState(false); // Для индикации отправки
+
+  // useEffect(() => {
+  //   let html5QrCode;
+
+  //   const qrCodeSuccess = async (decodedText) => {
+  //     console.log("QR-код успешно считан:", decodedText);
+  //     setQrMessage(decodedText);
+  //     setIsEnabled(false);
+
+  //     // Отправка данных на API
+  //     try {
+  //       setIsPosting(true);
+  //       const response = await fetch("https://api.tcats.uz/api/crm/cashier/scanner/", {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM0NjQzNzEyLCJpYXQiOjE3MzQ2NDE5MTIsImp0aSI6IjUyOWQwZDliNmM1NTRhZWI4YWUyYTgyYmY5ZGY2M2E1IiwidXNlcl9pZCI6MTIxOH0.pzXm2a3OVubwZx6VseT7MOS8HsJ7ZTyk71ZcA6ZgpsA`, // Добавьте токен сюда
+  //         },
+  //         body: JSON.stringify({
+  //           ticket_id: decodedText,
+  //         }),
+  //       });
+
+  //       if (response.ok) {
+  //         const data = await response.json();
+  //         console.log("Ответ API:", data);
+  //         alert("QR-код успешно отправлен!");
+  //       } else {
+  //         console.error("Ошибка API:", response.statusText);
+  //         alert("Ошибка при отправке QR-кода.");
+  //       }
+  //     } catch (error) {
+  //       console.error("Ошибка сети:", error);
+  //       alert("Ошибка сети при отправке QR-кода.");
+  //     } finally {
+  //       setIsPosting(false);
+  //     }
+  //   };
+
+  //   const qrCodeError = (error) => {
+  //     console.warn("Ошибка считывания QR-кода:", error);
+  //   };
+
+  //   if (isEnabled) {
+  //     html5QrCode = new Html5Qrcode("qrCodeContainer");
+  //     html5QrCode
+  //       .start(
+  //         { facingMode: "environment" },
+  //         { fps: 15, qrbox: { width: 400, height: 400 } },
+  //         qrCodeSuccess,
+  //         qrCodeError
+  //       )
+  //       .catch((err) => {
+  //         console.error("Ошибка запуска сканера:", err);
+  //       });
+  //   }
+
+  //   return () => {
+  //     if (html5QrCode) {
+  //       html5QrCode.stop().then(() => html5QrCode.clear());
+  //     }
+  //   };
+  // }, [isEnabled]);
 
   return (
     <ClientWrapper>
-      <div className={styles.blockforScanner} >
-        <button onClick={() => setIsEnabled(!isEnabled)}>
-        </button>
-        <div id="qrCodeContainer" style={{ width: "100%", height: "300px" }}></div>
-        {qrMessage ? <p>Считанный QR-код: {qrMessage}</p> : <p>QR-код ещё не считан</p>}
-      </div>
-
+      {isEnabled ? (
+        <div className={styles.blockforScanner}>
+          <button onClick={() => setIsEnabled(!isEnabled)}></button>
+          <div
+            id="qrCodeContainer"
+            style={{ width: "100%", height: "300px" }}
+          ></div>
+        </div>
+      ) : (
+        <></>
+      )}
 
       <section
         className={styles.rootcontaioner}
         style={{
           overflow: "auto",
-          scrollbarWidth: "none" /* Firefox */,
-          msOverflowStyle: "none" /* IE и Edge */,
+          scrollbarWidth: "none",
+          msOverflowStyle: "none",
         }}
       >
         <section className={styles.containerrow}>
@@ -523,7 +615,7 @@ export default function Home() {
                   </div>
                 </div>
                 <div className={styles.maincashier}>
-                  <div className={styles.boxfastinstrument}>
+                  {/* <div className={styles.boxfastinstrument}>
                     <div className={styles.boxrowfastinstrument}>
                       <div className={styles.boxscanicon}>
                         <Image
@@ -611,8 +703,8 @@ export default function Home() {
                         </div>
                       </div>{" "}
                     </div>
-                  </div>
-                  <div className={styles.boxstatistic}>
+                  </div> */}
+                  {/* <div className={styles.boxstatistic}>
                     <div className={styles.boxrowstatandsort}>
                       <div className={styles.boxrowstatustic}>
                         <Image
@@ -689,7 +781,7 @@ export default function Home() {
                         <Line data={chartData2} options={options2} />
                       )}
                     </div>
-                  </div>
+                  </div> */}
                   <div className={styles.boxrowstatusqr}>
                     <div className={styles.boxscanandstatusqr}>
                       <h1>
@@ -917,28 +1009,42 @@ export default function Home() {
                             transition={{ duration: 0.1, ease: "linear" }}
                             className={styles.boxcameras}
                           >
-                            <button className={styles.onecamera}>
+                            {/* <button className={styles.onecamera}>
                               <p>{camerabutton ? "камера 1" : ""}</p>
                             </button>
                             <button className={styles.onecamera}>
                               <p>{camerabutton ? "камера 2" : ""}</p>
-                            </button>
+                            </button> */}
+                            {cameras.map((camera) => (
+                              <option key={camera.id} value={camera.id}>
+                                {camera.label || `${camera.id}`}
+                              </option>
+                            ))}
                           </motion.div>
                         </AnimatePresence>
                       </div>
                       <AnimatePresence>
                         <motion.button
-                          // onClick={() => setIsEnabled(!isEnabled)}
+                          onClick={() => setIsEnabled(!isEnabled)}
                           transition={{ duration: 0.1, ease: "linear" }}
                           className={styles.btnscan}
                         >
-                          <button onClick={() => setIsEnabled(!isEnabled)}>
-                            {isEnabled ? "Остановить сканер" : <p>Сканировать</p>}
-                          </button>
-
-                          {/* {isEnabled ? "On" : "Off"} */}
+                          <div>
+                            {isEnabled ? (
+                              "Остановить сканер"
+                            ) : (
+                              <p>Сканировать</p>
+                            )}
+                          </div>
                         </motion.button>
                       </AnimatePresence>
+                      {qrMessage ? (
+                        <p className={styles.qrMessage}>
+                          Считанный QR-код: {qrMessage}
+                        </p>
+                      ) : (
+                        <></>
+                      )}
                     </div>
                   </div>
                 </div>

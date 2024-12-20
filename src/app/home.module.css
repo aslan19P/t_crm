@@ -1,11 +1,17 @@
 .blockforScanner{
     position: fixed;
-    backdrop-filter: blur(6px);
-    height: 350px;
+    backdrop-filter: blur(4px);
     width: 400px;
     z-index: 5;
     margin: 0 auto;
+    right: -0.2px;
+    bottom: -0.2px;
+    border-radius: 15px;
 }
+.qrCodeContainer video{
+    border-radius: 16px;
+}
+
 .rootcontaioner {
     display: flex;
     width: 100%;
@@ -339,6 +345,7 @@
 }
 
 .maincashier {
+    padding: 20px 0px 0px 0px;
     display: flex;
     width: 100%;
     justify-content: center;
@@ -878,6 +885,10 @@
     border-radius: 60px;
     border: 1px solid var(--Neutrals-Neutrals1800, #5C5C5C);
     background: var(--COLORS-Neutral-500, #191716);
+}
+
+.qrMessage{
+    text-align: center;
 }
 
 @media screen and (max-width:1440px) {
