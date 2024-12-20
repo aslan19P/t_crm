@@ -283,19 +283,19 @@ export default function Home() {
   };
 
   // -------------------------------------------------------------------------
-  const [isEnabled, setIsEnabled] = useState(false);
-  const [qrMessage, setQrMessage] = useState("");
-  const [cameras, setCameras] = useState([]);
-  const [selectedCamera, setSelectedCamera] = useState("");
-  const [error, setError] = useState("");
+  const [isEnabled, setIsEnabled] = useState(false); // Флаг включения сканера
+  const [qrMessage, setQrMessage] = useState(""); // Считанное сообщение QR-кода
+  const [cameras, setCameras] = useState([]); // Список камер
+  const [selectedCamera, setSelectedCamera] = useState(""); // Выбранная камера
+  const [error, setError] = useState(""); // Ошибка получения камер
 
+  // Получение списка камер при загрузке компонента
   useEffect(() => {
-    // Получение списка камер при загрузке компонента
     Html5Qrcode.getCameras()
       .then((devices) => {
         if (devices && devices.length > 0) {
-          setCameras(devices);
-          setSelectedCamera(devices[0].id); // Установить первую камеру по умолчанию
+          setCameras(devices); // Устанавливаем список камер
+          setSelectedCamera(devices[0].id); // Устанавливаем первую камеру по умолчанию
         } else {
           setError("Камеры не найдены");
         }
@@ -306,13 +306,14 @@ export default function Home() {
       });
   }, []);
 
+  // Инициализация сканера при включении
   useEffect(() => {
     let html5QrCode;
 
     const qrCodeSuccess = (decodedText) => {
       console.log("QR-код успешно считан:", decodedText);
       setQrMessage(decodedText);
-      setIsEnabled(false);
+      setIsEnabled(false); // Останавливаем сканирование после успешного чтения
     };
 
     const qrCodeError = (error) => {
@@ -323,13 +324,14 @@ export default function Home() {
       html5QrCode = new Html5Qrcode("qrCodeContainer");
       html5QrCode
         .start(
-          selectedCamera,
-          { fps: 15, qrbox: { width: 400, height: 400 } },
+          selectedCamera, // Используем выбранную камеру
+          { fps: 15, qrbox: { width: 300, height: 300 } }, // Настройки сканера
           qrCodeSuccess,
           qrCodeError
         )
         .catch((err) => {
           console.error("Ошибка запуска сканера:", err);
+          setIsEnabled(false);
         });
     }
 
@@ -1016,9 +1018,13 @@ export default function Home() {
                               <p>{camerabutton ? "камера 2" : ""}</p>
                             </button> */}
                             {cameras.map((camera) => (
-                              <option key={camera.id} value={camera.id}>
-                                {camera.label || `${camera.id}`}
-                              </option>
+                              <button
+                                key={camera.id}
+                                onClick={() => setSelectedCamera(camera.id)}
+                                disabled={isEnabled} // Блокируем выбор камеры во время сканирования
+                              >
+                                {camera.label || `Камера ${camera.id}`}
+                              </button>
                             ))}
                           </motion.div>
                         </AnimatePresence>
