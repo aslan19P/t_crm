@@ -1021,6 +1021,18 @@ export default function Home() {
                               <button
                                 key={camera.id}
                                 onClick={() => setSelectedCamera(camera.id)}
+                                style={{
+                                  background:
+                                    selectedCamera === camera.id
+                                      ? "#262626"
+                                      : "#191919",
+                                  color:
+                                    selectedCamera === camera.id
+                                      ? "#fff"
+                                      : "#fff",
+                                      borderRadius:"10px",
+                                      padding:'5px 10px'
+                                }}
                                 disabled={isEnabled} // Блокируем выбор камеры во время сканирования
                               >
                                 {camera.label || `Камера ${camera.id}`}

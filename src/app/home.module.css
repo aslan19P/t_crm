@@ -4,8 +4,6 @@
     width: 400px;
     z-index: 5;
     margin: 0 auto;
-    right: -0.2px;
-    bottom: -0.2px;
     border-radius: 15px;
 }
 .qrCodeContainer video{
@@ -734,7 +732,6 @@
 
 .boxcameras {
     display: flex;
-    width: 256px;
     padding: 12px 14px;
     flex-direction: column;
     justify-content: center;
