@@ -782,7 +782,8 @@ export default function Home() {
                             width={24}
                             height={24}
                           />
-                          Статусы сканирования
+                          <p>Статусы сканирования</p>
+                          
                         </div>
                         <div className={styles.boxsucsesserror}>
                           <div className={styles.boxscansucsess}>
