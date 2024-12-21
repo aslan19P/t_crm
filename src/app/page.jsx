@@ -37,7 +37,7 @@ ChartJS.register(
 export default function Home() {
   const { user, auth, logout } = useGlobal();
   const [camerabutton, setcamerabutton] = useState(false);
-  const [boxleft, setboxleft] = useState(false);
+  const [boxleft, setboxleft] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
   const [opensort, setopensort] = useState(false);
   const [sort1, setsort1] = useState(true);
@@ -205,7 +205,7 @@ export default function Home() {
   };
 
   const clickboxleftbutton = () => {
-    setboxleft(!boxleft);
+    setboxleft(boxleft);
   };
 
   const clickopensort = () => {
@@ -414,18 +414,6 @@ export default function Home() {
 
   return (
     <ClientWrapper>
-      {isEnabled ? (
-        <div className={styles.blockforScanner}>
-          <button onClick={() => setIsEnabled(!isEnabled)}></button>
-          <div
-            id="qrCodeContainer"
-            style={{ width: "100%", height: "300px" }}
-          ></div>
-        </div>
-      ) : (
-        <></>
-      )}
-
       <section
         className={styles.rootcontaioner}
         style={{
@@ -830,12 +818,12 @@ export default function Home() {
                             <p>12345</p>
                             <p>21.12.2024</p>
                             <p>
-                            <Image
-                              src="/scansucsessone.svg"
-                              alt="sucsess"
-                              width={24}
-                              height={24}
-                            />
+                              <Image
+                                src="/scansucsessone.svg"
+                                alt="sucsess"
+                                width={24}
+                                height={24}
+                              />
                             </p>
                           </div>
                           <div className={styles.boxtwostat}>
@@ -843,12 +831,12 @@ export default function Home() {
                             <p>12345</p>
                             <p>21.12.2024</p>
                             <p>
-                            <Image
-                              src="/scansucsessone.svg"
-                              alt="sucsess"
-                              width={24}
-                              height={24}
-                            />
+                              <Image
+                                src="/scansucsessone.svg"
+                                alt="sucsess"
+                                width={24}
+                                height={24}
+                              />
                             </p>
                           </div>
                           <div className={styles.boxtwostat}>
@@ -856,12 +844,12 @@ export default function Home() {
                             <p>12345</p>
                             <p>21.12.2024</p>
                             <p>
-                            <Image
-                              src="/scansucsessone.svg"
-                              alt="sucsess"
-                              width={24}
-                              height={24}
-                            />
+                              <Image
+                                src="/scansucsessone.svg"
+                                alt="sucsess"
+                                width={24}
+                                height={24}
+                              />
                             </p>
                           </div>
                           <div className={styles.boxtwostat}>
@@ -869,12 +857,12 @@ export default function Home() {
                             <p>12345</p>
                             <p>21.12.2024</p>
                             <p>
-                            <Image
-                              src="/scansucsessone.svg"
-                              alt="sucsess"
-                              width={24}
-                              height={24}
-                            />
+                              <Image
+                                src="/scansucsessone.svg"
+                                alt="sucsess"
+                                width={24}
+                                height={24}
+                              />
                             </p>
                           </div>
                           <div className={styles.boxtwostat}>
@@ -882,12 +870,12 @@ export default function Home() {
                             <p>12345</p>
                             <p>21.12.2024</p>
                             <p>
-                            <Image
-                              src="/scansucsessone.svg"
-                              alt="sucsess"
-                              width={24}
-                              height={24}
-                            />
+                              <Image
+                                src="/scansucsessone.svg"
+                                alt="sucsess"
+                                width={24}
+                                height={24}
+                              />
                             </p>
                           </div>
                           <div className={styles.boxtwostat}>
@@ -895,12 +883,12 @@ export default function Home() {
                             <p>12345</p>
                             <p>21.12.2024</p>
                             <p>
-                            <Image
-                              src="/scansucsessone.svg"
-                              alt="sucsess"
-                              width={24}
-                              height={24}
-                            />
+                              <Image
+                                src="/scansucsessone.svg"
+                                alt="sucsess"
+                                width={24}
+                                height={24}
+                              />
                             </p>
                           </div>
                           <div className={styles.boxtwostat}>
@@ -908,12 +896,12 @@ export default function Home() {
                             <p>12345</p>
                             <p>21.12.2024</p>
                             <p>
-                            <Image
-                              src="/scansucsessone.svg"
-                              alt="sucsess"
-                              width={24}
-                              height={24}
-                            />
+                              <Image
+                                src="/scansucsessone.svg"
+                                alt="sucsess"
+                                width={24}
+                                height={24}
+                              />
                             </p>
                           </div>
                           <div className={styles.boxtwostat}>
@@ -921,12 +909,12 @@ export default function Home() {
                             <p>12345</p>
                             <p>21.12.2024</p>
                             <p>
-                            <Image
-                              src="/scansucsessone.svg"
-                              alt="sucsess"
-                              width={24}
-                              height={24}
-                            />
+                              <Image
+                                src="/scansucsessone.svg"
+                                alt="sucsess"
+                                width={24}
+                                height={24}
+                              />
                             </p>
                           </div>
                         </div>
@@ -934,131 +922,151 @@ export default function Home() {
                     </div>
                   </div>
                   <div className={styles.boxscanandstatusqr}>
-                    <h1>
-                      <div className={styles.imgstatusscan}>
-                        <Image
-                          src="/scanqr.svg"
-                          alt="scan"
-                          width={24}
-                          height={24}
-                        />
-                        Сканирование QR
-                      </div>
-                    </h1>
-                    <div className={styles.boxstatusqrcontent}>
-                      <AnimatePresence>
-                        <motion.div
-                          transition={{ duration: 0.1, ease: "linear" }}
-                          className={styles.boxqrimgandtext}
-                        >
+                    {isEnabled ? (
+                      <div className={styles.blockforScanner}>
+                        <div
+                          id="qrCodeContainer"
+                          style={{
+                            width: "100%",
+                            height: "300px",
+                            borderRadius: "40px",
+                          }}
+                        ></div>
+                        <button onClick={() => setIsEnabled(!isEnabled)}>
                           <Image
-                            src="/scanerqr.svg"
-                            alt="qr"
-                            width={34}
-                            height={34}
+                            src="/closecamera.svg"
+                            alt="close"
+                            width={40}
+                            height={40}
                           />
-                          <p>Отсканировать QR</p>
-                        </motion.div>
-                      </AnimatePresence>
-                      <div className={styles.boxrootbtncamera}>
-                        <AnimatePresence>
-                          <motion.button
-                            transition={{ duration: 0.1, ease: "linear" }}
-                            onClick={clickcamerabutton}
-                            className={styles.btncamera}
-                          >
+                        </button>
+                      </div>
+                    ) : (
+                      <>
+                        <h1>
+                          <div className={styles.imgstatusscan}>
                             <Image
-                              src="/camera.svg"
-                              alt="camera"
+                              src="/scanqr.svg"
+                              alt="scan"
                               width={24}
                               height={24}
                             />
-                            <p>Выбрать камеру</p>
-                            <AnimatePresence>
-                              {camerabutton ? (
-                                <motion.img
-                                  src="/arrowtop.svg"
-                                  alt="arrow"
-                                  width={24}
-                                  height={24}
-                                />
-                              ) : (
-                                <motion.img
-                                  animate={{ rotate: 180 }}
-                                  transition={{ duration: 0.1, ease: "linear" }}
-                                  src="/arrowtop.svg"
-                                  alt="arrow"
-                                  width={24}
-                                  height={24}
-                                />
-                              )}
-                            </AnimatePresence>
-                          </motion.button>
-                        </AnimatePresence>
-                        <AnimatePresence>
-                          <motion.div
-                            initial={{ y: 50, opacity: 0, display: "none" }}
-                            animate={
-                              camerabutton
-                                ? { y: 70, opacity: 1, display: "flex" }
-                                : { y: 50, opacity: 0, display: "none" }
-                            }
-                            transition={{ duration: 0.1, ease: "linear" }}
-                            className={styles.boxcameras}
-                          >
-                            {/* <button className={styles.onecamera}>
-                              <p>{camerabutton ? "камера 1" : ""}</p>
-                            </button>
-                            <button className={styles.onecamera}>
-                              <p>{camerabutton ? "камера 2" : ""}</p>
-                            </button> */}
-                            {cameras.map((camera) => (
-                              <button
-                                key={camera.id}
-                                onClick={() => setSelectedCamera(camera.id)}
-                                style={{
-                                  background:
-                                    selectedCamera === camera.id
-                                      ? "#262626"
-                                      : "#191919",
-                                  color:
-                                    selectedCamera === camera.id
-                                      ? "#fff"
-                                      : "#fff",
-                                      borderRadius:"10px",
-                                      padding:'5px 10px'
-                                }}
-                                disabled={isEnabled} // Блокируем выбор камеры во время сканирования
-                              >
-                                {camera.label || `Камера ${camera.id}`}
-                              </button>
-                            ))}
-                          </motion.div>
-                        </AnimatePresence>
-                      </div>
-                      <AnimatePresence>
-                        <motion.button
-                          onClick={() => setIsEnabled(!isEnabled)}
-                          transition={{ duration: 0.1, ease: "linear" }}
-                          className={styles.btnscan}
-                        >
-                          <div>
-                            {isEnabled ? (
-                              "Остановить сканер"
-                            ) : (
-                              <p>Сканировать</p>
-                            )}
+                            Сканирование QR
                           </div>
-                        </motion.button>
-                      </AnimatePresence>
-                      {qrMessage ? (
-                        <p className={styles.qrMessage}>
-                          Считанный QR-код: {qrMessage}
-                        </p>
-                      ) : (
-                        <></>
-                      )}
-                    </div>
+                        </h1>
+                        <div className={styles.boxstatusqrcontent}>
+                          <AnimatePresence>
+                            <motion.div
+                              transition={{ duration: 0.1, ease: "linear" }}
+                              className={styles.boxqrimgandtext}
+                            >
+                              <Image
+                                src="/scanerqr.svg"
+                                alt="qr"
+                                width={34}
+                                height={34}
+                              />
+                              <p>Отсканировать QR</p>
+                            </motion.div>
+                          </AnimatePresence>
+                          <div className={styles.boxrootbtncamera}>
+                            <AnimatePresence>
+                              <motion.button
+                                transition={{ duration: 0.1, ease: "linear" }}
+                                onClick={clickcamerabutton}
+                                className={styles.btncamera}
+                              >
+                                <Image
+                                  src="/camera.svg"
+                                  alt="camera"
+                                  width={24}
+                                  height={24}
+                                />
+                                <p>Выбрать камеру</p>
+                                <AnimatePresence>
+                                  {camerabutton ? (
+                                    <motion.img
+                                      src="/arrowtop.svg"
+                                      alt="arrow"
+                                      width={24}
+                                      height={24}
+                                    />
+                                  ) : (
+                                    <motion.img
+                                      animate={{ rotate: 180 }}
+                                      transition={{
+                                        duration: 0.1,
+                                        ease: "linear",
+                                      }}
+                                      src="/arrowtop.svg"
+                                      alt="arrow"
+                                      width={24}
+                                      height={24}
+                                    />
+                                  )}
+                                </AnimatePresence>
+                              </motion.button>
+                            </AnimatePresence>
+                            <AnimatePresence>
+                              <motion.div
+                                initial={{ y: 50, opacity: 0, display: "none" }}
+                                animate={
+                                  camerabutton
+                                    ? { y: 70, opacity: 1, display: "flex" }
+                                    : { y: 50, opacity: 0, display: "none" }
+                                }
+                                transition={{ duration: 0.1, ease: "linear" }}
+                                className={styles.boxcameras}
+                              >
+                                {cameras.map((camera) => (
+                                  <button
+                                    key={camera.id}
+                                    onClick={() => setSelectedCamera(camera.id)}
+                                    style={{
+                                      background:
+                                        selectedCamera === camera.id
+                                          ? "#262626"
+                                          : "#191919",
+                                      color:
+                                        selectedCamera === camera.id
+                                          ? "#fff"
+                                          : "#fff",
+                                      borderRadius: "10px",
+                                      padding: "5px 10px",
+                                    }}
+                                    disabled={isEnabled} // Блокируем выбор камеры во время сканирования
+                                  >
+                                    {camera.label || `${camera.id}`}
+                                  </button>
+                                ))}
+                              </motion.div>
+                            </AnimatePresence>
+                          </div>
+                          <AnimatePresence>
+                            <motion.button
+                              onClick={() => setIsEnabled(!isEnabled)}
+                              transition={{ duration: 0.1, ease: "linear" }}
+                              className={styles.btnscan}
+                            >
+                              <div>
+                                {isEnabled ? (
+                                  "Остановить сканер"
+                                ) : (
+                                  <p>Сканировать</p>
+                                )}
+                              </div>
+                            </motion.button>
+                          </AnimatePresence>
+                          {qrMessage ? (
+                            <p className={styles.qrMessage}>
+                              Считанный QR-код: {qrMessage}
+                            </p>
+                          ) : (
+                            <></>
+                          )}
+                        </div>
+                      </>
+                    )}
                   </div>
                 </div>
               </div>
@@ -1116,13 +1124,51 @@ export default function Home() {
                 </div>
               </div>
             )}
-            {btncontrol && <></>}
-            {btnsettings && <></>}
+            {btncontrol && (
+              <>
+                <p>В разработке</p>
+              </>
+            )}
+            {btnsettings && (
+              <>
+                <p>В разработке</p>
+              </>
+            )}
           </motion.div>
+          <div className={styles.boxbottom}>
+            <div className={styles.boxBottomContent}>
+              <button onClick={clickbtnmain} className={styles.boxBottomBtn}>
+                <Image src="/home.svg" alt="home" width={34} height={34} />
+                <p>Главная</p>
+              </button>
+              <button onClick={clickbtnreport} className={styles.boxBottomBtn}>
+                <Image src="/report.svg" alt="home" width={34} height={34} />
+                <p>Отчеты</p>
+              </button>
+              <button onClick={clickbtncontrol} className={styles.boxBottomBtn}>
+                <Image
+                  src="/todayselledticket.svg"
+                  alt="home"
+                  width={34}
+                  height={34}
+                />
+                <p>Управление</p>
+              </button>
+              <button
+                onClick={clickbtnsettings}
+                className={styles.boxBottomBtn}
+              >
+                <Image src="/settings.svg" alt="home" width={34} height={34} />
+                <p>Настройки</p>
+              </button>
+              <button onClick={logout} className={styles.boxBottomBtn}>
+                <Image src="/logout.svg" alt="home" width={34} height={34} />
+                <p>Выйти</p>
+              </button>
+            </div>
+          </div>
         </section>
       </section>
     </ClientWrapper>
   );
 }
-
-// ---------------------------------------------- Сканер ----------------------------------------------
