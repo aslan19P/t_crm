@@ -9,6 +9,7 @@ import { useGlobal } from "@/utils/global";
 import axios from "axios";
 import { DateTime } from "luxon";
 import { Html5Qrcode } from "html5-qrcode";
+import { getAccessToken } from "./login/Tokens";
 
 import { Line } from "react-chartjs-2";
 import {
@@ -205,7 +206,7 @@ export default function Home() {
   };
 
   const clickboxleftbutton = () => {
-    setboxleft(boxleft);
+    setboxleft(!boxleft);
   };
 
   const clickopensort = () => {
@@ -306,14 +307,54 @@ export default function Home() {
       });
   }, []);
 
-  // Инициализация сканера при включении
+
+
   useEffect(() => {
     let html5QrCode;
+
+    const sendScannedData = async (ticketId) => {
+      try {
+        const accessToken = getAccessToken(); // Получаем accessToken из zustand или другого хранилища
+
+        if (!accessToken) {
+          console.error("Токен отсутствует");
+          return;
+        }
+
+        const response = await fetch(
+          "https://api.tcats.uz/api/partner_tickets/cashier/scanner/",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${accessToken}`, // Добавляем токен в заголовки
+            },
+            body: JSON.stringify({ ticket_id: ticketId }),
+          }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          console.log("Данные успешно отправлены:", data);
+        } else {
+          console.error(
+            "Ошибка при отправке данных:",
+            response.status,
+            response.statusText
+          );
+        }
+      } catch (error) {
+        console.error("Ошибка запроса:", error);
+      }
+    };
 
     const qrCodeSuccess = (decodedText) => {
       console.log("QR-код успешно считан:", decodedText);
       setQrMessage(decodedText);
       setIsEnabled(false); // Останавливаем сканирование после успешного чтения
+
+      // Отправляем данные на API
+      sendScannedData(decodedText);
     };
 
     const qrCodeError = (error) => {
@@ -342,76 +383,68 @@ export default function Home() {
     };
   }, [isEnabled, selectedCamera]);
 
-  // --------------------------------------------
-  // MUIZ НЕ ТРОГАЙ ЭТОТ КОД !!!
+  // ---------------------------------------------------------------------
 
-  // const [isEnabled, setIsEnabled] = useState(false);
-  // const [qrMessage, setQrMessage] = useState("");
-  // const [isPosting, setIsPosting] = useState(false); // Для индикации отправки
+  const [getUserInfo, setGetUserInfo] = useState(null);
 
-  // useEffect(() => {
-  //   let html5QrCode;
+  useEffect(() => {
+    const fetchData = async () => {
+      const accessToken = getAccessToken(); // Получаем токен из хранилища
+      try {
+        const response = await fetch("https://api.tcats.uz/api/auth/staff", {
+          method: "GET", // Метод должен быть 'GET'
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`, // Добавляем токен в заголовки
+          },
+        });
+  
+        if (!response.ok) {
+          // Обработка ошибок ответа
+          throw new Error(`Ошибка: ${response.status} ${response.statusText}`);
+        }
+  
+        const data = await response.json(); // Парсим JSON из ответа
+        setGetUserInfo(data); // Устанавливаем данные в состояние
+      } catch (error) {
+        console.error("Ошибка при запросе данных:", error);
+        setGetUserInfo(null); // Устанавливаем null при ошибке
+      }
+    };
+  
+    fetchData();
+  }, []);
 
-  //   const qrCodeSuccess = async (decodedText) => {
-  //     console.log("QR-код успешно считан:", decodedText);
-  //     setQrMessage(decodedText);
-  //     setIsEnabled(false);
 
-  //     // Отправка данных на API
-  //     try {
-  //       setIsPosting(true);
-  //       const response = await fetch("https://api.tcats.uz/api/crm/cashier/scanner/", {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM0NjQzNzEyLCJpYXQiOjE3MzQ2NDE5MTIsImp0aSI6IjUyOWQwZDliNmM1NTRhZWI4YWUyYTgyYmY5ZGY2M2E1IiwidXNlcl9pZCI6MTIxOH0.pzXm2a3OVubwZx6VseT7MOS8HsJ7ZTyk71ZcA6ZgpsA`, // Добавьте токен сюда
-  //         },
-  //         body: JSON.stringify({
-  //           ticket_id: decodedText,
-  //         }),
-  //       });
+  const [getUserStat, setGetUserStat] = useState(null);
 
-  //       if (response.ok) {
-  //         const data = await response.json();
-  //         console.log("Ответ API:", data);
-  //         alert("QR-код успешно отправлен!");
-  //       } else {
-  //         console.error("Ошибка API:", response.statusText);
-  //         alert("Ошибка при отправке QR-кода.");
-  //       }
-  //     } catch (error) {
-  //       console.error("Ошибка сети:", error);
-  //       alert("Ошибка сети при отправке QR-кода.");
-  //     } finally {
-  //       setIsPosting(false);
-  //     }
-  //   };
-
-  //   const qrCodeError = (error) => {
-  //     console.warn("Ошибка считывания QR-кода:", error);
-  //   };
-
-  //   if (isEnabled) {
-  //     html5QrCode = new Html5Qrcode("qrCodeContainer");
-  //     html5QrCode
-  //       .start(
-  //         { facingMode: "environment" },
-  //         { fps: 15, qrbox: { width: 400, height: 400 } },
-  //         qrCodeSuccess,
-  //         qrCodeError
-  //       )
-  //       .catch((err) => {
-  //         console.error("Ошибка запуска сканера:", err);
-  //       });
-  //   }
-
-  //   return () => {
-  //     if (html5QrCode) {
-  //       html5QrCode.stop().then(() => html5QrCode.clear());
-  //     }
-  //   };
-  // }, [isEnabled]);
-
+  useEffect(() => {
+    const fetchData = async () => {
+      const accessToken = getAccessToken(); // Получаем токен из хранилища
+      try {
+        const response = await fetch("https://api.tcats.uz/api/partner_tickets/get-all-scans/", {
+          method: "GET", // Метод должен быть 'GET'
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`, // Добавляем токен в заголовки
+          },
+        });
+  
+        if (!response.ok) {
+          // Обработка ошибок ответа
+          throw new Error(`Ошибка: ${response.status} ${response.statusText}`);
+        }
+  
+        const data = await response.json(); // Парсим JSON из ответа
+        setGetUserStat(data); // Устанавливаем данные в состояние
+      } catch (error) {
+        console.error("Ошибка при запросе данных:", error);
+        setGetUserStat(null); // Устанавливаем null при ошибке
+      }
+    };
+  
+    fetchData();
+  }, []);
   return (
     <ClientWrapper>
       <section
@@ -587,6 +620,7 @@ export default function Home() {
                       <p>{date}</p>
                     </div>
                   </h1>
+                  {getUserInfo && (
                   <div className={styles.infocashier}>
                     <div className={styles.boxavatarname}>
                       <Image
@@ -596,13 +630,14 @@ export default function Home() {
                         height={50}
                       />
                       <h2>
-                        Коптлеулов <br /> Арслан
+                        {getUserInfo.last_name} <br /> {getUserInfo.first_name}
                       </h2>
                     </div>
                     <div className={styles.cashier}>
-                      <p>Cashier</p>
+                      <p>{getUserInfo.role}</p>
                     </div>
                   </div>
+                  )}
                 </div>
                 <div className={styles.maincashier}>
                   {/* <div className={styles.boxfastinstrument}>
@@ -783,7 +818,6 @@ export default function Home() {
                             height={24}
                           />
                           <p>Статусы сканирования</p>
-                          
                         </div>
                         <div className={styles.boxsucsesserror}>
                           <div className={styles.boxscansucsess}>
@@ -797,7 +831,7 @@ export default function Home() {
                           </div>
                           <div className={styles.boxscanerror}>
                             <Image
-                              src="scan error.svg"
+                              src="scanerror.svg"
                               alt="sucsess"
                               width={24}
                               height={24}
@@ -814,111 +848,22 @@ export default function Home() {
                           <p>Статус</p>
                         </div>
                         <div className={styles.boxscrollstat}>
-                          <div className={styles.boxtwostat}>
-                            <p>12345</p>
-                            <p>12345</p>
-                            <p>21.12.2024</p>
-                            <p>
-                              <Image
-                                src="/scansucsessone.svg"
-                                alt="sucsess"
-                                width={24}
-                                height={24}
-                              />
-                            </p>
-                          </div>
-                          <div className={styles.boxtwostat}>
-                            <p>12345</p>
-                            <p>12345</p>
-                            <p>21.12.2024</p>
-                            <p>
-                              <Image
-                                src="/scansucsessone.svg"
-                                alt="sucsess"
-                                width={24}
-                                height={24}
-                              />
-                            </p>
-                          </div>
-                          <div className={styles.boxtwostat}>
-                            <p>12345</p>
-                            <p>12345</p>
-                            <p>21.12.2024</p>
-                            <p>
-                              <Image
-                                src="/scansucsessone.svg"
-                                alt="sucsess"
-                                width={24}
-                                height={24}
-                              />
-                            </p>
-                          </div>
-                          <div className={styles.boxtwostat}>
-                            <p>12345</p>
-                            <p>12345</p>
-                            <p>21.12.2024</p>
-                            <p>
-                              <Image
-                                src="/scansucsessone.svg"
-                                alt="sucsess"
-                                width={24}
-                                height={24}
-                              />
-                            </p>
-                          </div>
-                          <div className={styles.boxtwostat}>
-                            <p>12345</p>
-                            <p>12345</p>
-                            <p>21.12.2024</p>
-                            <p>
-                              <Image
-                                src="/scansucsessone.svg"
-                                alt="sucsess"
-                                width={24}
-                                height={24}
-                              />
-                            </p>
-                          </div>
-                          <div className={styles.boxtwostat}>
-                            <p>12345</p>
-                            <p>12345</p>
-                            <p>21.12.2024</p>
-                            <p>
-                              <Image
-                                src="/scansucsessone.svg"
-                                alt="sucsess"
-                                width={24}
-                                height={24}
-                              />
-                            </p>
-                          </div>
-                          <div className={styles.boxtwostat}>
-                            <p>12345</p>
-                            <p>12345</p>
-                            <p>21.12.2024</p>
-                            <p>
-                              <Image
-                                src="/scansucsessone.svg"
-                                alt="sucsess"
-                                width={24}
-                                height={24}
-                              />
-                            </p>
-                          </div>
-                          <div className={styles.boxtwostat}>
-                            <p>12345</p>
-                            <p>12345</p>
-                            <p>21.12.2024</p>
-                            <p>
-                              <Image
-                                src="/scansucsessone.svg"
-                                alt="sucsess"
-                                width={24}
-                                height={24}
-                              />
-                            </p>
-                          </div>
+                        {getUserStat && getUserStat.map(({id, status, created_at, ticket, partner_ticket}) => (
+                        <div key={id} className={styles.boxtwostat}>
+                          <p>{id}</p>
+                          <p>{ticket == null ? partner_ticket : ticket}</p>
+                          <p>{new Date(created_at).toLocaleDateString("ru-RU")}</p>
+                          <p>
+                            <Image
+                              src={status ? "/scansucsessone.svg" : "/scanerror.svg"}
+                              alt="sucsess"
+                              width={24}
+                              height={24}
+                            />
+                          </p>
                         </div>
+                        ))}
+                      </div>
                       </div>
                     </div>
                   </div>
@@ -1022,10 +967,7 @@ export default function Home() {
                                 {cameras.map((camera) => (
                                   <button
                                     key={camera.id}
-                                    onClick={() => {
-                                      setSelectedCamera(camera.id); // Устанавливаем выбранную камеру
-                                      setcamerabutton(false); // Закрываем блок с камерами
-                                    }}
+                                    onClick={() => setSelectedCamera(camera.id)}
                                     style={{
                                       background:
                                         selectedCamera === camera.id
